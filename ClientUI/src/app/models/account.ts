@@ -1,6 +1,6 @@
 export interface RegisterRequest {
     email: string;
-    userName: string;
+    username: string;
     password: string;
     passwordConfirmation: string;
 }
@@ -11,6 +11,6 @@ export interface LoginRequest {
 }
 
 export interface User {
-    userName: string;
+    username: string;
     token: string;
 }

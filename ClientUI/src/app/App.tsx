@@ -3,9 +3,16 @@ import LoginForm from "../features/account/LoginForm";
 import { Button, Navbar, Section } from "@blueprintjs/core";
 import { useStore } from "./stores/store";
 import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
 
 function App() {
-    const { userStore } = useStore();
+    const { commonStore, userStore } = useStore();
+
+    useEffect(() => {
+        if (commonStore.token) {
+            userStore.getUser();
+        }
+    });
 
     return (
         <>
@@ -20,7 +27,7 @@ function App() {
             <Section>
                 {userStore.user ? (
                     <>
-                        <h2>Hello {userStore.user!.userName}!</h2>
+                        <h2>Hello {userStore.user!.username}!</h2>
                         <button onClick={userStore.logout}>Logout</button>
                     </>
                 ) : (

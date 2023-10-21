@@ -36,4 +36,13 @@ export default class UserStore {
         store.commonStore.setToken(null);
         this.setUser(null);
     };
+
+    getUser = async () => {
+        try {
+            const user = await agent.Account.currentUser();
+            this.setUser(user);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 }

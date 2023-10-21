@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { User, LoginRequest, RegisterRequest } from "../models/account";
+import { store } from "../stores/store";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
@@ -9,6 +10,13 @@ async function simulateNetworkLatency(response: AxiosResponse) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return response;
 }
+
+axios.interceptors.request.use((config) => {
+    const token = store.commonStore.token;
+    if (token && config.headers)
+        config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
 
 function handleResponseError(error: AxiosError) {
     switch (error.status) {
@@ -41,8 +49,10 @@ const requests = {
 
 const Account = {
     register: (request: RegisterRequest) =>
-        requests.post<User>("/register", request),
-    login: (request: LoginRequest) => requests.post<User>("/login", request),
+        requests.post<User>("/account/register", request),
+    login: (request: LoginRequest) =>
+        requests.post<User>("/account/login", request),
+    currentUser: () => requests.get<User>("/account"),
 };
 
 const agent = {
