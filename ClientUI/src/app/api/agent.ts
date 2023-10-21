@@ -1,9 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import {
-    AccountResponse,
-    LoginRequest,
-    RegisterRequest,
-} from "../models/account";
+import { User, LoginRequest, RegisterRequest } from "../models/account";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
@@ -45,9 +41,8 @@ const requests = {
 
 const Account = {
     register: (request: RegisterRequest) =>
-        requests.post<AccountResponse>("/register", request),
-    login: (request: LoginRequest) =>
-        requests.post<AccountResponse>("/login", request),
+        requests.post<User>("/register", request),
+    login: (request: LoginRequest) => requests.post<User>("/login", request),
 };
 
 const agent = {

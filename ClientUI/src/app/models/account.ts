@@ -10,7 +10,7 @@ export interface LoginRequest {
     password: string;
 }
 
-export interface AccountResponse {
+export interface User {
     userName: string;
     token: string;
 }
