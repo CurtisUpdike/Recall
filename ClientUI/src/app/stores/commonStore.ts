@@ -2,6 +2,7 @@ import { makeAutoObservable, reaction } from "mobx";
 
 export default class CommonStore {
     token: string | null = localStorage.getItem("token");
+    appLoaded = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -18,4 +19,6 @@ export default class CommonStore {
     setToken = (token: string | null) => {
         this.token = token;
     };
+
+    setAppLoaded = () => (this.appLoaded = true);
 }
