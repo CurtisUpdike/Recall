@@ -35,7 +35,7 @@ public class TokenService
         var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
         {
             Subject = claims,
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = credentials
         });
         return tokenHandler.WriteToken(token);
