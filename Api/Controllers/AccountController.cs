@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Api.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<AppUser> userManager;
@@ -25,10 +26,10 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<Response>> Register(RegisterRequest request)
     {
-        if (string.IsNullOrEmpty(request.UserName))
+        if (string.IsNullOrEmpty(request.Username))
             ModelState.AddModelError("username", "Username is required");
 
-        if (await userManager.Users.AnyAsync(u => u.UserName == request.UserName))
+        if (await userManager.Users.AnyAsync(u => u.UserName == request.Username))
             ModelState.AddModelError("username", "Username is taken");
 
         if (await userManager.Users.AnyAsync(u => u.Email == request.Email))
@@ -43,17 +44,13 @@ public class AccountController : ControllerBase
         var user = new AppUser
         {
             Email = request.Email,
-            UserName = request.UserName
+            UserName = request.Username
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
 
         if (result.Succeeded)
-            return new Response
-            {
-                UserName = request.UserName,
-                Token = tokenService.CreateToken(user)
-            };
+            return new Response(request.Username, tokenService.CreateToken(user));
         else
             return BadRequest(result.Errors);
     }
@@ -70,12 +67,20 @@ public class AccountController : ControllerBase
         var passwordDoesMatch = await userManager.CheckPasswordAsync(user, request.Password);
 
         if (passwordDoesMatch)
-            return new Response
-            {
-                UserName = user.UserName!,
-                Token = tokenService.CreateToken(user)
-            };
+            return new Response(user.UserName!, tokenService.CreateToken(user));
         else
             return Unauthorized();
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<Response>> GetCurrentUser()
+    {
+        var user = await userManager.FindByEmailAsync(
+            User.FindFirstValue(ClaimTypes.Email)!);
+
+        if (user is null)
+            return Unauthorized();
+        else
+            return new Response(user.UserName!, tokenService.CreateToken(user));
     }
 }

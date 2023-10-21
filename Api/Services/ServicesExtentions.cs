@@ -1,6 +1,9 @@
 ﻿using Api.Data;
 using Api.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -8,6 +11,28 @@ namespace Api.Services;
 
 public static class ServicesExtentions
 {
+    public static IServiceCollection AddAuthorizedControllers(this IServiceCollection services)
+    {
+        services.AddControllers(options =>
+        {
+            var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser().Build();
+            options.Filters.Add(new AuthorizeFilter(policy));
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddDataContext(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddDbContext<DataContext>(options =>
+        {
+            options.UseSqlServer(config.GetConnectionString("DataContext"));
+        });
+
+        return services;
+    }
+
     public static IServiceCollection AddAuth(
         this IServiceCollection services, IConfiguration config)
     {
@@ -18,25 +43,41 @@ public static class ServicesExtentions
         })
             .AddEntityFrameworkStores<DataContext>();
 
-        var keyFromConfig = config["TokenKey"];
-        if (keyFromConfig is null)
-            throw new ArgumentException("Token key was not found in configuration");
+
+        var secret = config["JwtSecret"];
+        if (secret is null)
+            throw new ArgumentNullException("JWT secret was not found in configuration");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(keyFromConfig)),
                     ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                 };
             });
+
+        services.AddAuthorization();
 
         services.AddScoped<TokenService>();
 
         return services; 
+    }
+
+    public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy", policy =>
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+            });
+        });
+
+        return services;
     }
 }

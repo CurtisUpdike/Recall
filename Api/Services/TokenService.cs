@@ -17,24 +17,25 @@ public class TokenService
 
     public string CreateToken(AppUser user)
     {
-        var keyFromConfig = config["TokenKey"];
-        if (keyFromConfig is null)
-            throw new ArgumentNullException("Token key was not found in configuration");
-
-        var claims = new ClaimsIdentity(new List<Claim>
+        var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName!),
-        });
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email!)
+        };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyFromConfig));
+        var secret = config["JwtSecret"];
+        if (secret is null)
+            throw new ArgumentNullException("JWT secret was not found in configuration");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenHandler = new JwtSecurityTokenHandler();
 
         var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
         {
-            Subject = claims,
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = credentials
         });
