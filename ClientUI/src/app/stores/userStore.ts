@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { RegisterRequest, LoginRequest, User } from "../models/account";
 import agent from "../api/agent";
 import { store } from "./store";
+import { router } from "../router/routes";
 
 export default class UserStore {
     user: User | null = null;
@@ -17,6 +18,7 @@ export default class UserStore {
             const user = await agent.Account.register(request);
             store.commonStore.setToken(user.token);
             this.setUser(user);
+            router.navigate("/");
         } catch (error) {
             throw error;
         }
@@ -27,6 +29,7 @@ export default class UserStore {
             const user = await agent.Account.login(request);
             store.commonStore.setToken(user.token);
             this.setUser(user);
+            router.navigate("/");
         } catch (error) {
             throw error;
         }
@@ -35,6 +38,7 @@ export default class UserStore {
     logout = () => {
         store.commonStore.setToken(null);
         this.setUser(null);
+        router.navigate("/");
     };
 
     getUser = async () => {

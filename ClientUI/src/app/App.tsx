@@ -1,10 +1,9 @@
-import RegisterForm from "../features/account/RegisterForm";
-import LoginForm from "../features/account/LoginForm";
-import { Button, Navbar, Section } from "@blueprintjs/core";
 import { useStore } from "./stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import LoadingPage from "./common/loading/LoadingPage";
+import { Outlet } from "react-router-dom";
+import Nav from "./layout/Nav";
 
 function App() {
     const { commonStore, userStore } = useStore();
@@ -19,27 +18,8 @@ function App() {
 
     return (
         <>
-            <Navbar>
-                <Navbar.Group>
-                    <Navbar.Heading>Recall</Navbar.Heading>
-                    <Navbar.Divider />
-                    <Button className="bp5-minimal" icon="home" text="Home" />
-                </Navbar.Group>
-            </Navbar>
-            <h1>Welcome to Recall!</h1>
-            <Section>
-                {userStore.user ? (
-                    <>
-                        <h2>Hello {userStore.user!.username}!</h2>
-                        <button onClick={userStore.logout}>Logout</button>
-                    </>
-                ) : (
-                    <>
-                        <RegisterForm />
-                        <LoginForm />
-                    </>
-                )}
-            </Section>
+            <Nav />
+            <Outlet />
         </>
     );
 }
