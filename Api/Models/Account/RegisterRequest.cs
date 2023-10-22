@@ -15,5 +15,6 @@ public class RegisterRequest
     public string Password { get; set; } = string.Empty;
 
     [Required]
+    [RegularExpression("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$", ErrorMessage = "Password must be complex")]
     public string PasswordConfirmation { get; set; } = string.Empty;
 }

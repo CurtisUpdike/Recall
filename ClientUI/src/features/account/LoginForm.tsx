@@ -1,58 +1,73 @@
-import { useState } from "react";
+import { Button, Callout, H2 } from "@blueprintjs/core";
 import { useStore } from "../../app/stores/store";
+import { ErrorMessage, Form, Formik } from "formik";
+import TextInput from "../../app/common/form/TextInput";
+import PasswordInput from "../../app/common/form/PasswordInput";
+import { observer } from "mobx-react-lite";
+import * as Yup from "yup";
 
 function LoginForm() {
-    const initialInput = {
-        email: "",
-        userName: "",
-        password: "",
-        passwordConfirmation: "",
-    };
-
-    const [input, setInput] = useState(initialInput);
     const { userStore } = useStore();
 
     return (
-        <form
-            onSubmit={(event) => {
-                event.preventDefault();
-                userStore.login(input);
-                setInput(initialInput);
-            }}
+        <Formik
+            initialValues={{ email: "", password: "", error: null }}
+            onSubmit={(values, { setErrors }) =>
+                userStore
+                    .login(values)
+                    .catch(() =>
+                        setErrors({ error: "Invalid email or password" }),
+                    )
+            }
+            validationSchema={Yup.object({
+                email: Yup.string().email().required(),
+                password: Yup.string().required(),
+            })}
         >
-            <h2>Login</h2>
-            <label htmlFor="email">
-                Email Address:
-                <input
-                    id="email"
-                    name="email"
-                    value={input.email}
-                    onChange={(e) =>
-                        setInput((oldInput) => ({
-                            ...oldInput,
-                            email: e.target.value,
-                        }))
-                    }
-                />
-            </label>
-            <br />
-            <label htmlFor="password">
-                Password:
-                <input
-                    id="password"
-                    name="password"
-                    value={input.password}
-                    onChange={(e) =>
-                        setInput((oldInput) => ({
-                            ...oldInput,
-                            password: e.target.value,
-                        }))
-                    }
-                />
-            </label>
-            <br />
-            <input type="submit" />
-        </form>
+            {({ handleSubmit, isSubmitting, isValid, dirty, errors }) => (
+                <Form
+                    onSubmit={handleSubmit}
+                    autoComplete="off"
+                    style={{ maxWidth: "300px", margin: "40px auto" }}
+                >
+                    <H2 style={{ marginBottom: "30px" }}>Sign in to Recall</H2>
+                    <ErrorMessage
+                        name="error"
+                        render={() => (
+                            <Callout
+                                intent="danger"
+                                style={{ marginBottom: "15px" }}
+                            >
+                                {errors.error}
+                            </Callout>
+                        )}
+                    />
+                    <TextInput
+                        name="email"
+                        label="Email"
+                        readOnly={isSubmitting}
+                        large
+                    />
+                    <PasswordInput
+                        name="password"
+                        label="Password"
+                        readOnly={isSubmitting}
+                        large
+                    />
+                    <Button
+                        disabled={!isValid || !dirty || isSubmitting}
+                        loading={isSubmitting}
+                        intent="primary"
+                        type="submit"
+                        large
+                        fill
+                    >
+                        Sign in
+                    </Button>
+                </Form>
+            )}
+        </Formik>
     );
 }
-export default LoginForm;
+
+export default observer(LoginForm);

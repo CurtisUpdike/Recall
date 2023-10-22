@@ -4,13 +4,6 @@ import { store } from "../stores/store";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
-axios.interceptors.response.use(simulateNetworkLatency, handleResponseError);
-
-async function simulateNetworkLatency(response: AxiosResponse) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return response;
-}
-
 axios.interceptors.request.use((config) => {
     const token = store.commonStore.token;
     if (token && config.headers)
@@ -18,10 +11,27 @@ axios.interceptors.request.use((config) => {
     return config;
 });
 
+axios.interceptors.response.use(simulateNetworkLatency, handleResponseError);
+
+async function simulateNetworkLatency(response: AxiosResponse) {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return response;
+}
+
 function handleResponseError(error: AxiosError) {
-    switch (error.status) {
+    const { data, status } = error.response as AxiosResponse;
+
+    switch (status) {
         case 400:
-            console.log("unspecified error");
+            if (data.errors) {
+                const modelStateErrors = [];
+                for (const key in data.errors)
+                    if (data.errors[key])
+                        modelStateErrors.push(data.errors[key]);
+                throw modelStateErrors.flat();
+            } else {
+                console.log("unspecified error");
+            }
             break;
         case 401:
             console.log("unauthorized");

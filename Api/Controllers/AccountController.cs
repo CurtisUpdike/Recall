@@ -30,16 +30,13 @@ public class AccountController : ControllerBase
             ModelState.AddModelError("username", "Username is required");
 
         if (await userManager.Users.AnyAsync(u => u.UserName == request.Username))
-            ModelState.AddModelError("username", "Username is taken");
+            ModelState.AddModelError("username", "Username is already taken");
 
         if (await userManager.Users.AnyAsync(u => u.Email == request.Email))
-            ModelState.AddModelError("email", "Email is take");
+            ModelState.AddModelError("email", "Email is already taken");
 
         if (request.Password != request.PasswordConfirmation)
             ModelState.AddModelError("password", "Passwords do not match");
-
-        if (!ModelState.IsValid)
-            return ValidationProblem();
 
         var user = new AppUser
         {

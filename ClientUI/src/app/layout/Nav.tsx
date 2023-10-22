@@ -24,7 +24,7 @@ function Nav() {
                             Sign up
                         </NavLink>
                         <NavLink to="login" icon="log-in">
-                            Login
+                            Sign in
                         </NavLink>
                     </>
                 ) : (
@@ -33,7 +33,7 @@ function Nav() {
                         className="bp5-minimal"
                         icon="log-out"
                     >
-                        Logout
+                        Sign out
                     </Button>
                 )}
             </Navbar.Group>
