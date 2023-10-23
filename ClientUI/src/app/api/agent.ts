@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { User, LoginRequest, RegisterRequest } from "../models/account";
 import { store } from "../stores/store";
+import { router } from "../router/routes";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
@@ -14,15 +15,18 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(simulateNetworkLatency, handleResponseError);
 
 async function simulateNetworkLatency(response: AxiosResponse) {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return response;
 }
 
 function handleResponseError(error: AxiosError) {
-    const { data, status } = error.response as AxiosResponse;
+    const { data, status, config } = error.response as AxiosResponse;
 
     switch (status) {
         case 400:
+            if (config.method === "get" && data.errors.hasOwnProperty("id")) {
+                router.navigate("/not-found");
+            }
             if (data.errors) {
                 const modelStateErrors = [];
                 for (const key in data.errors)
@@ -40,7 +44,7 @@ function handleResponseError(error: AxiosError) {
             console.log("forbidden");
             break;
         case 404:
-            console.log("not found");
+            router.navigate("/not-found");
             break;
         case 500:
             console.log("server error");

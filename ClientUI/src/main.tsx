@@ -4,6 +4,7 @@ import { FocusStyleManager } from "@blueprintjs/core";
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+import "./app/layout/styles.css";
 import { StoreContext, store } from "./app/stores/store.ts";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./app/router/routes.tsx";
