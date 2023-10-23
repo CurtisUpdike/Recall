@@ -3,8 +3,8 @@ import HomePage from "../../features/home/HomePage";
 import LoginForm from "../../features/account/LoginForm";
 import RegisterForm from "../../features/account/RegisterForm";
 import App from "../App";
-import TestErrors from "../../features/testing/TestError";
 import NotFound from "../../features/errors/NotFound";
+import ServerError from "../../features/errors/ServerError";
 
 const routes: RouteObject[] = [
     {
@@ -14,6 +14,7 @@ const routes: RouteObject[] = [
             { path: "/", element: <HomePage /> },
             { path: "register", element: <RegisterForm /> },
             { path: "login", element: <LoginForm /> },
+            { path: "server-error", element: <ServerError /> },
             { path: "not-found", element: <NotFound /> },
             { path: "*", element: <Navigate replace to="not-found" /> },
         ],

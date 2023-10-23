@@ -5,7 +5,6 @@ interface Props {
 }
 
 function ValidationErrors({ errors }: Props) {
-    console.log(errors);
     return (
         <Callout
             intent="danger"

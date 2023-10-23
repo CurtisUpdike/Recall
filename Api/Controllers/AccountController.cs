@@ -24,7 +24,7 @@ public class AccountController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<ActionResult<Response>> Register(RegisterRequest request)
+    public async Task<ActionResult<UserCredentials>> Register(RegisterRequest request)
     {
         if (string.IsNullOrEmpty(request.Username))
             ModelState.AddModelError("username", "Username is required");
@@ -38,6 +38,9 @@ public class AccountController : ControllerBase
         if (request.Password != request.PasswordConfirmation)
             ModelState.AddModelError("password", "Passwords do not match");
 
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+
         var user = new AppUser
         {
             Email = request.Email,
@@ -47,14 +50,14 @@ public class AccountController : ControllerBase
         var result = await userManager.CreateAsync(user, request.Password);
 
         if (result.Succeeded)
-            return new Response(request.Username, tokenService.CreateToken(user));
+            return new UserCredentials(request.Username, tokenService.CreateToken(user));
         else
             return BadRequest(result.Errors);
     }
 
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<ActionResult<Response>> Login(LoginRequest request)
+    public async Task<ActionResult<UserCredentials>> Login(LoginRequest request)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
@@ -64,13 +67,13 @@ public class AccountController : ControllerBase
         var passwordDoesMatch = await userManager.CheckPasswordAsync(user, request.Password);
 
         if (passwordDoesMatch)
-            return new Response(user.UserName!, tokenService.CreateToken(user));
+            return new UserCredentials(user.UserName!, tokenService.CreateToken(user));
         else
             return Unauthorized();
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response>> GetCurrentUser()
+    public async Task<ActionResult<UserCredentials>> GetCurrentUser()
     {
         var user = await userManager.FindByEmailAsync(
             User.FindFirstValue(ClaimTypes.Email)!);
@@ -78,6 +81,6 @@ public class AccountController : ControllerBase
         if (user is null)
             return Unauthorized();
         else
-            return new Response(user.UserName!, tokenService.CreateToken(user));
+            return new UserCredentials(user.UserName!, tokenService.CreateToken(user));
     }
 }

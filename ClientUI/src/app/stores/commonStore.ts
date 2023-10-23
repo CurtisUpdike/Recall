@@ -1,8 +1,10 @@
 import { makeAutoObservable, reaction } from "mobx";
+import { ServerError } from "../models/serverError";
 
 export default class CommonStore {
     token: string | null = localStorage.getItem("token");
     appLoaded = false;
+    error: ServerError | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -16,9 +18,9 @@ export default class CommonStore {
         );
     }
 
-    setToken = (token: string | null) => {
-        this.token = token;
-    };
+    setToken = (token: string | null) => (this.token = token);
 
     setAppLoaded = () => (this.appLoaded = true);
+
+    setServerError = (error: ServerError) => (this.error = error);
 }
