@@ -6,5 +6,7 @@ namespace Api.Data;
 
 public class DataContext : IdentityDbContext<AppUser>
 {
+    public DbSet<Deck> Decks { get; set; }
+
     public DataContext(DbContextOptions options) : base(options) { }
 }
