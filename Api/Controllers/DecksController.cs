@@ -18,8 +18,7 @@ public class DecksController : ControllerBase
     }
 
     public record DeckResponse(string Id, string Name);
-    public record CreateDeckRequest(string Name);
-    public record UpdateDeckRequest(string Id, string Name);
+    public record DeckRequest(string Name);
 
     // GET: api/decks
     [HttpGet]
@@ -47,29 +46,23 @@ public class DecksController : ControllerBase
     }
 
     // POST: api/decks
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Deck>> CreateDeck(CreateDeckRequest deck)
+    public async Task<ActionResult<Deck>> CreateDeck(DeckRequest deck)
     {
-        var newDeck = new Deck
+        context.Decks.Add(new Deck
         {
             Name = deck.Name,
             OwnerId = User.GetId()
-        };
+        });
 
-        context.Decks.Add(newDeck);
         await context.SaveChangesAsync();
         return Ok();
     }
 
     // PUT: api/decks/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDesk(string id, UpdateDeckRequest updatedDeck)
+    public async Task<IActionResult> UpdateDesk(string id, DeckRequest updatedDeck)
     {
-        if (id != updatedDeck.Id)
-            return BadRequest();
-
         var deck = await context.Decks.FindAsync(id);
 
         if (deck == null) 
@@ -93,7 +86,7 @@ public class DecksController : ControllerBase
             return NotFound();
 
         if (deck.OwnerId != User.GetId())
-            return BadRequest();
+            return Unauthorized();
 
         context.Decks.Remove(deck);
         await context.SaveChangesAsync();
