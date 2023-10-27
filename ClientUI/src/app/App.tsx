@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import LoadingPage from "./common/loading/LoadingPage";
 import { Outlet } from "react-router-dom";
 import Nav from "./layout/Nav";
+import DialogContainer from "./common/dialog/DialogContainer";
 
 function App() {
     const { commonStore, userStore } = useStore();
@@ -18,8 +19,11 @@ function App() {
 
     return (
         <>
+            <DialogContainer />
             <Nav />
-            <Outlet />
+            <div style={{ margin: "4rem 6rem", flex: "1" }}>
+                <Outlet />
+            </div>
         </>
     );
 }

@@ -16,6 +16,9 @@ function Nav() {
                 <NavLink to="/" icon="home">
                     Home
                 </NavLink>
+                <NavLink to="/decks" icon="folder-close">
+                    Decks
+                </NavLink>
             </Navbar.Group>
             <Navbar.Group align="right">
                 {!user ? (

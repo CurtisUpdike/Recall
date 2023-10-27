@@ -69,8 +69,16 @@ const Account = {
     currentUser: () => requests.get<User>("/account"),
 };
 
+const Decks = {
+    all: () => requests.get<Deck[]>("/decks"),
+    create: (deck: DeckRequest) => requests.post<Deck>("/decks", deck),
+    update: (deck: Deck) => requests.put<Deck>(`/decks/${deck.id}`, deck),
+    delete: (deck: Deck) => requests.delete<void>(`/decks/${deck.id}`),
+};
+
 const agent = {
     Account,
+    Decks,
 };
 
 export default agent;

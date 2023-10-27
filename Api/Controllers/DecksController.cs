@@ -40,28 +40,30 @@ public class DecksController : ControllerBase
             return NotFound();
 
         if (deck.OwnerId != User.GetId())
-            return Unauthorized();
+            return Forbid();
 
         return new DeckResponse(deck.Id, deck.Name);
     }
 
     // POST: api/decks
     [HttpPost]
-    public async Task<ActionResult<Deck>> CreateDeck(DeckRequest deck)
+    public async Task<ActionResult<DeckResponse>> CreateDeck(DeckRequest deck)
     {
-        context.Decks.Add(new Deck
+        var newDeck = new Deck
         {
             Name = deck.Name,
             OwnerId = User.GetId()
-        });
+        };
+
+        context.Decks.Add(newDeck);
 
         await context.SaveChangesAsync();
-        return Ok();
+        return new DeckResponse(newDeck.Id, newDeck.Name);
     }
 
     // PUT: api/decks/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDesk(string id, DeckRequest updatedDeck)
+    public async Task<ActionResult<DeckResponse>> UpdateDesk(string id, DeckRequest updatedDeck)
     {
         var deck = await context.Decks.FindAsync(id);
 
@@ -69,11 +71,11 @@ public class DecksController : ControllerBase
             return NotFound();
 
         if (deck.OwnerId != User.GetId())
-            return Unauthorized();
+            return Forbid();
 
         deck.Name = updatedDeck.Name;
         await context.SaveChangesAsync();
-        return Ok();
+        return new DeckResponse(deck.Id, deck.Name);
     }
 
     // DELETE: api/decks/5
@@ -86,7 +88,7 @@ public class DecksController : ControllerBase
             return NotFound();
 
         if (deck.OwnerId != User.GetId())
-            return Unauthorized();
+            return Forbid();
 
         context.Decks.Remove(deck);
         await context.SaveChangesAsync();

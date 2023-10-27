@@ -5,6 +5,7 @@ import RegisterForm from "../../features/account/RegisterForm";
 import App from "../App";
 import NotFound from "../../features/errors/NotFound";
 import ServerError from "../../features/errors/ServerError";
+import DeckPage from "../../features/decks/DeckPage";
 
 const routes: RouteObject[] = [
     {
@@ -14,6 +15,7 @@ const routes: RouteObject[] = [
             { path: "/", element: <HomePage /> },
             { path: "register", element: <RegisterForm /> },
             { path: "login", element: <LoginForm /> },
+            { path: "decks", element: <DeckPage /> },
             { path: "server-error", element: <ServerError /> },
             { path: "not-found", element: <NotFound /> },
             { path: "*", element: <Navigate replace to="not-found" /> },
