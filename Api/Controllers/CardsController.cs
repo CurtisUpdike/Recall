@@ -47,7 +47,7 @@ public class CardsController : ControllerBase
 
     // POST: api/cards
     [HttpPost]
-    public async Task<IActionResult> CreateCard(CardRequest card)
+    public async Task<ActionResult<CardResponse>> CreateCard(CardRequest card)
     {
         var deck = await context.Decks.FindAsync(card.DeckId);
 
@@ -57,16 +57,18 @@ public class CardsController : ControllerBase
         if (deck.OwnerId != User.GetId())
             return Forbid();
 
-        context.Add(new Card
+        var newCard = new Card
         {
             Front = card.Front,
             Back = card.Back,
             DeckId = card.DeckId,
             OwnerId = User.GetId(),
-        });
+        };
+
+        context.Add(newCard);
 
         await context.SaveChangesAsync();
-        return Ok();
+        return new CardResponse(newCard.Id,newCard.Front, newCard.Back, newCard.DeckId);
     }
 
     // PUT: api/cards/5

@@ -1,10 +1,10 @@
 import { useStore } from "./stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import LoadingPage from "./common/loading/LoadingPage";
-import { Outlet } from "react-router-dom";
 import Nav from "./layout/Nav";
 import DialogContainer from "./common/dialog/DialogContainer";
+import MainContent from "./layout/MainContent";
+import Loading from "./common/loading/Loading";
 
 function App() {
     const { commonStore, userStore } = useStore();
@@ -15,15 +15,13 @@ function App() {
         else commonStore.setAppLoaded();
     }, [commonStore, userStore]);
 
-    if (!commonStore.appLoaded) return <LoadingPage />;
+    if (!commonStore.appLoaded) return <Loading />;
 
     return (
         <>
             <DialogContainer />
             <Nav />
-            <div style={{ margin: "4rem 6rem", flex: "1" }}>
-                <Outlet />
-            </div>
+            <MainContent />
         </>
     );
 }

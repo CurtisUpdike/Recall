@@ -30,6 +30,7 @@ function DeckForm({ deck }: Props) {
                     <Form autoComplete="off" onSubmit={handleSubmit}>
                         <TextInput
                             name="name"
+                            label="Deck name"
                             placeholder="What would you like to name your deck?"
                             readOnly={isSubmitting}
                             large

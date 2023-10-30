@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { store } from "./store";
 import { toast } from "../common/toast/toaster";
+import { router } from "../router/routes";
 
 export default class DeckStore {
     repository = new Map<string, Deck>();
@@ -51,6 +52,7 @@ export default class DeckStore {
             this.setLoading(true);
             const newDeck = await agent.Decks.create(deck);
             this.setDeck(newDeck);
+            router.navigate(`/decks/${newDeck.id}`);
         } catch (error) {
             toast.error(`${deck.name} failed to create`);
         } finally {
@@ -75,6 +77,7 @@ export default class DeckStore {
     deleteDeck = async (deck: Deck) => {
         try {
             this.setLoading(true);
+            router.navigate("/decks");
             await agent.Decks.delete(deck.id);
             this.repository.delete(deck.id);
         } catch (error) {

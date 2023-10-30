@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { toast } from "../common/toast/toaster";
+import { store } from "./store";
 
 export default class CardStore {
     repository = new Map<string, Card>();
@@ -37,6 +38,7 @@ export default class CardStore {
         } catch {
             toast.error("Failed to create card");
         } finally {
+            store.dialogStore.closeDialog();
             this.setLoading(false);
         }
     };
@@ -49,6 +51,7 @@ export default class CardStore {
         } catch {
             toast.error("Failed to update card");
         } finally {
+            store.dialogStore.closeDialog();
             this.setLoading(false);
         }
     };
@@ -56,7 +59,7 @@ export default class CardStore {
     deleteCard = async (card: Card) => {
         try {
             this.setLoading(true);
-            await agent.Cards.delete(card);
+            await agent.Cards.delete(card.id);
             this.repository.delete(card.id);
         } catch {
             toast.error("Failed to delete card");

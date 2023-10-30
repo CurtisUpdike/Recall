@@ -1,18 +1,11 @@
 import { useEffect } from "react";
 import { useStore } from "../../../app/stores/store";
-import {
-    Button,
-    ButtonGroup,
-    Card,
-    CardList,
-    H1,
-    NonIdealState,
-} from "@blueprintjs/core";
+import { Button, Card, CardList, H1, Icon } from "@blueprintjs/core";
 import { observer } from "mobx-react-lite";
 import DeckForm from "../form/DeckForm";
-import DeckDelete from "../form/DeckDelete";
 import Loading from "../../../app/common/loading/Loading";
 import { router } from "../../../app/router/routes";
+import EmptyDecks from "./EmptyDecks";
 
 function DeckDashboard() {
     const {
@@ -26,63 +19,37 @@ function DeckDashboard() {
 
     if (!loaded) return <Loading text="Loading decks..." />;
 
-    if (decks.length == 0)
-        return (
-            <NonIdealState
-                title="You don't have any decks"
-                action={
-                    <Button
-                        outlined={true}
-                        text="Create deck"
-                        icon="plus"
-                        intent="primary"
-                        onClick={() => openDialog(<DeckForm />)}
-                    />
-                }
-            />
-        );
-
     return (
         <>
-            <H1 style={{ display: "flex", justifyContent: "space-between" }}>
-                Decks{" "}
-                <Button
-                    outlined={true}
-                    icon="plus"
-                    intent="primary"
-                    onClick={() => openDialog(<DeckForm />)}
-                >
-                    Create
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                <H1>Decks</H1>
+                <Button icon="plus" onClick={() => openDialog(<DeckForm />)}>
+                    New deck
                 </Button>
-            </H1>
-            <CardList>
-                {decks.map((deck) => (
-                    <Card
-                        key={deck.id}
-                        style={{ justifyContent: "space-between" }}
-                        interactive={true}
-                        onClick={() => router.navigate(`/decks/${deck.id}`)}
-                    >
-                        <span>{deck.name}</span>
-                        <ButtonGroup minimal>
-                            <Button
-                                text="Rename"
-                                intent="primary"
-                                onClick={() =>
-                                    openDialog(<DeckForm deck={deck} />)
-                                }
-                            />
-                            <Button
-                                text="Delete"
-                                intent="danger"
-                                onClick={() =>
-                                    openDialog(<DeckDelete deck={deck} />)
-                                }
-                            />
-                        </ButtonGroup>
-                    </Card>
-                ))}
-            </CardList>
+            </div>
+            {decks.length === 0 ? (
+                <EmptyDecks />
+            ) : (
+                <CardList>
+                    {decks.map((deck) => (
+                        <Card
+                            key={deck.id}
+                            style={{ justifyContent: "space-between" }}
+                            interactive={true}
+                            onClick={() => router.navigate(`/decks/${deck.id}`)}
+                        >
+                            <span>{deck.name}</span>
+                            <Icon icon="chevron-right" />
+                        </Card>
+                    ))}
+                </CardList>
+            )}
         </>
     );
 }
