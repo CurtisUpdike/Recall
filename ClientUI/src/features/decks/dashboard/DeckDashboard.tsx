@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useStore } from "../../app/stores/store";
+import { useStore } from "../../../app/stores/store";
 import {
     Button,
     ButtonGroup,
@@ -9,11 +9,12 @@ import {
     NonIdealState,
 } from "@blueprintjs/core";
 import { observer } from "mobx-react-lite";
-import DeckForm from "./form/DeckForm";
-import DeckDelete from "./form/DeckDelete";
-import Loading from "../../app/common/loading/Loading";
+import DeckForm from "../form/DeckForm";
+import DeckDelete from "../form/DeckDelete";
+import Loading from "../../../app/common/loading/Loading";
+import { router } from "../../../app/router/routes";
 
-function DeckPage() {
+function DeckDashboard() {
     const {
         deckStore: { loaded, loadDecks, decks },
         dialogStore: { openDialog },
@@ -59,6 +60,8 @@ function DeckPage() {
                     <Card
                         key={deck.id}
                         style={{ justifyContent: "space-between" }}
+                        interactive={true}
+                        onClick={() => router.navigate(`/decks/${deck.id}`)}
                     >
                         <span>{deck.name}</span>
                         <ButtonGroup minimal>
@@ -84,4 +87,4 @@ function DeckPage() {
     );
 }
 
-export default observer(DeckPage);
+export default observer(DeckDashboard);

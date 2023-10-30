@@ -19,6 +19,7 @@ public class DecksController : ControllerBase
 
     public record DeckResponse(string Id, string Name);
     public record DeckRequest(string Name);
+    public record CardResponse(string Id, string Front, string Back);
 
     // GET: api/decks
     [HttpGet]
@@ -75,7 +76,7 @@ public class DecksController : ControllerBase
 
         deck.Name = updatedDeck.Name;
         await context.SaveChangesAsync();
-        return new DeckResponse(deck.Id, deck.Name);
+        return Ok();
     }
 
     // DELETE: api/decks/5
@@ -93,5 +94,23 @@ public class DecksController : ControllerBase
         context.Decks.Remove(deck);
         await context.SaveChangesAsync();
         return Ok();
+    }
+
+    // GET: api/decks/5/cards
+    [HttpGet("{id}/cards")]
+    public async Task<ActionResult<IEnumerable<CardResponse>>> GetDeckCards(string id)
+    {
+        var deck = await context.Decks.FindAsync(id);
+        
+        if (deck is null)
+            return NotFound();
+
+        if (deck.OwnerId != User.GetId())
+            return Forbid();
+
+        return await context.Cards
+            .Where(c => c.DeckId == id)
+            .Select(c => new CardResponse(c.Id, c.Front, c.Back))
+            .ToListAsync();
     }
 }

@@ -3,12 +3,14 @@ import CommonStore from "./commonStore";
 import UserStore from "./userStore";
 import DeckStore from "./deckStore";
 import DialogStore from "./dialogStore";
+import CardStore from "./cardStore";
 
 interface Store {
     commonStore: CommonStore;
     dialogStore: DialogStore;
     userStore: UserStore;
     deckStore: DeckStore;
+    cardStore: CardStore;
 }
 
 export const store: Store = {
@@ -16,6 +18,7 @@ export const store: Store = {
     dialogStore: new DialogStore(),
     userStore: new UserStore(),
     deckStore: new DeckStore(),
+    cardStore: new CardStore(),
 };
 
 export const StoreContext = createContext(store);

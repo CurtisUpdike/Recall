@@ -71,14 +71,23 @@ const Account = {
 
 const Decks = {
     all: () => requests.get<Deck[]>("/decks"),
+    get: (id: string) => requests.get<Deck>(`/decks/${id}`),
     create: (deck: DeckRequest) => requests.post<Deck>("/decks", deck),
-    update: (deck: Deck) => requests.put<Deck>(`/decks/${deck.id}`, deck),
-    delete: (deck: Deck) => requests.delete<void>(`/decks/${deck.id}`),
+    update: (deck: Deck) => requests.put<void>(`/decks/${deck.id}`, deck),
+    delete: (id: string) => requests.delete<void>(`/decks/${id}`),
+};
+
+const Cards = {
+    all: () => requests.get<Card[]>("cards"),
+    create: (card: CardRequest) => requests.post<Card>("/cards", card),
+    update: (card: Card) => requests.put<void>(`/cards/${card.id}`, card),
+    delete: (id: string) => requests.delete<void>(`/cards/${id}`),
 };
 
 const agent = {
     Account,
     Decks,
+    Cards,
 };
 
 export default agent;

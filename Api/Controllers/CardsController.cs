@@ -17,7 +17,7 @@ public class CardsController : ControllerBase
         this.context = context;
     }
 
-    public record CardResponse(string Id, string Front, string Back);
+    public record CardResponse(string Id, string Front, string Back, string DeckId);
     public record CardRequest(string Front, string Back, string DeckId);
 
     // GET: api/cards
@@ -26,7 +26,7 @@ public class CardsController : ControllerBase
     {
         return await context.Cards
             .Where(c => c.OwnerId == User.GetId())
-            .Select(c => new CardResponse(c.Id, c.Front, c.Back))
+            .Select(c => new CardResponse(c.Id, c.Front, c.Back, c.DeckId))
             .ToListAsync();
     }
 
@@ -42,13 +42,21 @@ public class CardsController : ControllerBase
         if (card.OwnerId == User.GetId())
             return Unauthorized();
 
-        return new CardResponse(card.Id, card.Front, card.Back);
+        return new CardResponse(card.Id, card.Front, card.Back, card.DeckId);
     }
 
     // POST: api/cards
     [HttpPost]
     public async Task<IActionResult> CreateCard(CardRequest card)
     {
+        var deck = await context.Decks.FindAsync(card.DeckId);
+
+        if (deck is null)
+            return BadRequest();
+
+        if (deck.OwnerId != User.GetId())
+            return Forbid();
+
         context.Add(new Card
         {
             Front = card.Front,
@@ -65,13 +73,18 @@ public class CardsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCard(string id, CardRequest updatedCard)
     {
+        var deck = await context.Decks.FindAsync(updatedCard.DeckId);
+
+        if (deck is null)
+            return BadRequest();
+
         var card = await context.Cards.FindAsync(id);
 
         if (card == null)
             return NotFound();
 
         if (card.OwnerId != User.GetId())
-            return Unauthorized();
+            return Forbid();
 
         card.Front = updatedCard.Front;
         card.Back = updatedCard.Back;
@@ -91,7 +104,7 @@ public class CardsController : ControllerBase
             return NotFound();
 
         if (card.OwnerId != User.GetId())
-            return Unauthorized();
+            return Forbid();
 
         context.Cards.Remove(card);
         await context.SaveChangesAsync();
