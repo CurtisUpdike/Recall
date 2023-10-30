@@ -29,7 +29,10 @@ function DeckDashboard() {
                 }}
             >
                 <H1>Decks</H1>
-                <Button icon="plus" onClick={() => openDialog(<DeckForm />)}>
+                <Button
+                    icon="plus"
+                    onClick={() => openDialog(<DeckForm />, "New deck")}
+                >
                     New deck
                 </Button>
             </div>

@@ -14,7 +14,9 @@ const DeckMenu = ({ deck }: { deck: Deck }) => {
             <MenuItem
                 text="Rename"
                 icon="floppy-disk"
-                onClick={() => openDialog(<DeckForm deck={deck} />)}
+                onClick={() =>
+                    openDialog(<DeckForm deck={deck} />, `Edit ${deck.name}`)
+                }
             />
             <MenuItem
                 text="Delete"

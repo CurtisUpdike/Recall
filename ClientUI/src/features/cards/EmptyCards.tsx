@@ -16,7 +16,9 @@ function EmptyCards({ deckId }: { deckId: string }) {
                     text="Create card"
                     icon="plus"
                     intent="primary"
-                    onClick={() => openDialog(<CardForm deckId={deckId} />)}
+                    onClick={() =>
+                        openDialog(<CardForm deckId={deckId} />, "New card")
+                    }
                 />
             }
         />

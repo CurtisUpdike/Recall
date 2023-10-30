@@ -61,7 +61,10 @@ function DeckPage() {
                     <Button
                         icon="plus"
                         onClick={() =>
-                            openDialog(<CardForm deckId={deck.id} />)
+                            openDialog(
+                                <CardForm deckId={deck.id} />,
+                                "New card",
+                            )
                         }
                         text="New card"
                     />
@@ -79,6 +82,7 @@ function DeckPage() {
                             onClick={() =>
                                 openDialog(
                                     <CardForm card={card} deckId={deck.id} />,
+                                    "Edit card",
                                 )
                             }
                         >

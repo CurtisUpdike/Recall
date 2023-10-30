@@ -1,4 +1,4 @@
-import { Button, Icon } from "@blueprintjs/core";
+import { Button, Classes, Icon } from "@blueprintjs/core";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 
@@ -7,15 +7,15 @@ function DeckDelete({ deck }: { deck: Deck }) {
 
     return (
         <div>
-            <div className="bp5-alert-body">
-                <Icon icon="trash" intent="danger" />
-                <div className="bp5-alert-contents">
+            <div className={Classes.ALERT_BODY}>
+                <Icon icon="trash" intent="danger" size={40} />
+                <div className={Classes.ALERT_CONTENTS}>
                     <p>
                         Are you sure you want to delete <b>{deck.name}</b>?
                     </p>
                 </div>
             </div>
-            <div className="bp5-alert-footer">
+            <div className={Classes.ALERT_FOOTER}>
                 <Button
                     intent="danger"
                     onClick={() => deckStore.deleteDeck(deck)}

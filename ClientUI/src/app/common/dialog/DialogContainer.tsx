@@ -8,7 +8,11 @@ function DialogContainer() {
     } = useStore();
 
     return (
-        <Dialog isOpen={dialog.isOpen} onClose={closeDialog}>
+        <Dialog
+            isOpen={dialog.isOpen}
+            onClose={closeDialog}
+            title={dialog.title}
+        >
             <DialogBody>{dialog.body}</DialogBody>
         </Dialog>
     );

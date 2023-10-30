@@ -2,7 +2,7 @@ import { useStore } from "../../../app/stores/store";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import TextInput from "../../../app/common/form/TextInput";
-import { Button } from "@blueprintjs/core";
+import { Button, Classes } from "@blueprintjs/core";
 
 interface Props {
     deck?: Deck;
@@ -30,21 +30,20 @@ function DeckForm({ deck }: Props) {
                     <Form autoComplete="off" onSubmit={handleSubmit}>
                         <TextInput
                             name="name"
-                            label="Deck name"
-                            placeholder="What would you like to name your deck?"
+                            label="Name"
+                            placeholder="What do you want to call your deck?"
                             readOnly={isSubmitting}
-                            large
                         />
-                        <Button
-                            disabled={!isValid || !dirty || isSubmitting}
-                            loading={isSubmitting}
-                            intent="primary"
-                            type="submit"
-                            large
-                            fill
-                        >
-                            Save
-                        </Button>
+                        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                            <Button
+                                disabled={!isValid || !dirty || isSubmitting}
+                                loading={isSubmitting}
+                                intent="primary"
+                                type="submit"
+                            >
+                                Save
+                            </Button>
+                        </div>
                     </Form>
                 )}
             </Formik>

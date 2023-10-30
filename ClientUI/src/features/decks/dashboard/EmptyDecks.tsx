@@ -16,7 +16,7 @@ function EmptyDecks() {
                     text="Create deck"
                     icon="plus"
                     intent="primary"
-                    onClick={() => openDialog(<DeckForm />)}
+                    onClick={() => openDialog(<DeckForm />, "New deck")}
                 />
             }
         />

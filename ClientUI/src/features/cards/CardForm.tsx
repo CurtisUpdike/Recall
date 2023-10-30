@@ -1,7 +1,7 @@
 import { useStore } from "../../app/stores/store";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { Button } from "@blueprintjs/core";
+import { Button, Classes } from "@blueprintjs/core";
 import TextArea from "../../app/common/form/TextArea";
 
 interface Props {
@@ -12,7 +12,6 @@ interface Props {
 function CardForm({ card, deckId }: Props) {
     const {
         cardStore: { createCard, updateCard },
-        dialogStore,
     } = useStore();
 
     return (
@@ -42,34 +41,28 @@ function CardForm({ card, deckId }: Props) {
                     <Form autoComplete="off" onSubmit={handleSubmit}>
                         <TextArea
                             name="front"
-                            rows={3}
+                            rows={5}
                             label="Front"
                             readOnly={isSubmitting}
-                            large
                             fill
                         />
                         <TextArea
                             name="back"
-                            rows={3}
+                            rows={5}
                             label="Back"
                             readOnly={isSubmitting}
-                            large
                             fill
                         />
-                        <Button
-                            disabled={isSubmitting}
-                            onClick={dialogStore.closeDialog}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            disabled={!isValid || !dirty || isSubmitting}
-                            loading={isSubmitting}
-                            intent="primary"
-                            type="submit"
-                        >
-                            Save
-                        </Button>
+                        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                            <Button
+                                disabled={!isValid || !dirty || isSubmitting}
+                                loading={isSubmitting}
+                                intent="primary"
+                                type="submit"
+                            >
+                                Save
+                            </Button>
+                        </div>
                     </Form>
                 )}
             </Formik>
