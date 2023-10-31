@@ -21,6 +21,7 @@ export default class DeckStore {
     private setLoading = (value: boolean) => (this.loading = value);
     private getDeck = (id: string) => this.repository.get(id);
     private setDeck = (deck: Deck) => this.repository.set(deck.id, deck);
+    private removeDeck = (deck: Deck) => this.repository.delete(deck.id);
 
     loadDecks = async () => {
         try {
@@ -79,7 +80,7 @@ export default class DeckStore {
             this.setLoading(true);
             router.navigate("/decks");
             await agent.Decks.delete(deck.id);
-            this.repository.delete(deck.id);
+            this.removeDeck(deck);
         } catch (error) {
             toast.error(`${deck.name} failed to delete`);
         } finally {

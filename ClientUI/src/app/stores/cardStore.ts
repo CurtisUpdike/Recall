@@ -19,6 +19,7 @@ export default class CardStore {
     private setLoaded = () => (this.loaded = true);
     private setLoading = (value: boolean) => (this.loading = value);
     private setCard = (card: Card) => this.repository.set(card.id, card);
+    private removeCard = (card: Card) => this.repository.delete(card.id);
 
     loadCards = async () => {
         try {
@@ -60,10 +61,11 @@ export default class CardStore {
         try {
             this.setLoading(true);
             await agent.Cards.delete(card.id);
-            this.repository.delete(card.id);
+            this.removeCard(card);
         } catch {
             toast.error("Failed to delete card");
         } finally {
+            store.dialogStore.closeDialog();
             this.setLoading(false);
         }
     };

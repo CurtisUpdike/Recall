@@ -9,13 +9,13 @@ import {
     Card,
     CardList,
     H1,
-    Icon,
     Popover,
 } from "@blueprintjs/core";
 import CardForm from "../../cards/CardForm";
 
 import EditMenu from "../menu/DeckEditMenu";
 import EmptyCards from "../../cards/EmptyCards";
+import CardButtons from "../../cards/CardButtons";
 
 function DeckPage() {
     const {
@@ -55,7 +55,7 @@ function DeckPage() {
                         <Button
                             icon="edit"
                             rightIcon="caret-down"
-                            text="Edit"
+                            text="Edit deck"
                         />
                     </Popover>
                     <Button
@@ -77,17 +77,11 @@ function DeckPage() {
                 <CardList>
                     {deckCards.map((card) => (
                         <Card
-                            interactive={true}
+                            // interactive={true}
                             style={{ justifyContent: "space-between" }}
-                            onClick={() =>
-                                openDialog(
-                                    <CardForm card={card} deckId={deck.id} />,
-                                    "Edit card",
-                                )
-                            }
                         >
                             <span>{card.front}</span>
-                            <Icon icon="chevron-right" />
+                            <CardButtons card={card} deck={deck} />
                         </Card>
                     ))}
                 </CardList>

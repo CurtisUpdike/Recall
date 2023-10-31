@@ -6,6 +6,7 @@ import DeckForm from "../form/DeckForm";
 import Loading from "../../../app/common/loading/Loading";
 import { router } from "../../../app/router/routes";
 import EmptyDecks from "./EmptyDecks";
+import { Link } from "react-router-dom";
 
 function DeckDashboard() {
     const {
@@ -47,7 +48,12 @@ function DeckDashboard() {
                             interactive={true}
                             onClick={() => router.navigate(`/decks/${deck.id}`)}
                         >
-                            <span>{deck.name}</span>
+                            <Link
+                                to={`/decks/${deck.id}`}
+                                style={{ textDecoration: "none" }}
+                            >
+                                <span>{deck.name}</span>
+                            </Link>
                             <Icon icon="chevron-right" />
                         </Card>
                     ))}
