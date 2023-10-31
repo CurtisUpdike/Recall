@@ -12,6 +12,7 @@ function DialogContainer() {
             isOpen={dialog.isOpen}
             onClose={closeDialog}
             title={dialog.title}
+            style={{ marginLeft: "10px", marginRight: "10px" }}
         >
             <DialogBody>{dialog.body}</DialogBody>
         </Dialog>

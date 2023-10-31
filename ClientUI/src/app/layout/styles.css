@@ -6,10 +6,37 @@ body,
 }
 
 html {
-    background: #f6f7f9;
-}
+      background-image: linear-gradient(
+        to left bottom, #7085a4, #628fa8, #5a97a5, #5e9f9d, #6da491);
+    }
 
 #root {
     display: flex;
     flex-direction: column;
+}
+
+.main-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.main-content {
+    margin: 5vh 1rem;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    background-color: #F6F7F9;
+    box-shadow: 
+        0 0 0 1px rgba(17,20,24,.1), 
+        0 2px 4px rgba(17,20,24,.2), 
+        0 8px 24px rgba(17,20,24,.2);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }

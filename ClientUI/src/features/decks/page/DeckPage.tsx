@@ -39,13 +39,7 @@ function DeckPage() {
 
     return (
         <>
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-            >
+            <div className="section-header">
                 <H1>{deck.name}</H1>
                 <ButtonGroup>
                     <Popover
@@ -76,10 +70,7 @@ function DeckPage() {
             ) : (
                 <CardList>
                     {deckCards.map((card) => (
-                        <Card
-                            // interactive={true}
-                            style={{ justifyContent: "space-between" }}
-                        >
+                        <Card style={{ justifyContent: "space-between" }}>
                             <span>{card.front}</span>
                             <CardButtons card={card} deck={deck} />
                         </Card>

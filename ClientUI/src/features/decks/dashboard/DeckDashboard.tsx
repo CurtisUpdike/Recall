@@ -22,13 +22,7 @@ function DeckDashboard() {
 
     return (
         <>
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-            >
+            <div className="section-header">
                 <H1>Decks</H1>
                 <Button
                     icon="plus"
