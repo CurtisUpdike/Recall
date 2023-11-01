@@ -3,23 +3,13 @@ import { useParams } from "react-router-dom";
 import { useStore } from "../../../app/stores/store";
 import { useEffect, useState } from "react";
 import Loading from "../../../app/common/loading/Loading";
-import {
-    Button,
-    ButtonGroup,
-    Card,
-    CardList,
-    H1,
-    Popover,
-} from "@blueprintjs/core";
-import CardForm from "../../cards/CardForm";
-
-import EditMenu from "../menu/DeckEditMenu";
+import { Card, CardList, H1 } from "@blueprintjs/core";
 import EmptyCards from "../../cards/EmptyCards";
 import CardButtons from "../../cards/CardButtons";
+import DeckPageControls from "./DeckPageControls";
 
 function DeckPage() {
     const {
-        dialogStore: { openDialog },
         deckStore: { decks, loadDeck },
         cardStore: { cards, loaded: cardsLoaded, loadCards },
     } = useStore();
@@ -41,28 +31,7 @@ function DeckPage() {
         <>
             <div className="section-header">
                 <H1>{deck.name}</H1>
-                <ButtonGroup>
-                    <Popover
-                        content={<EditMenu deck={deck} />}
-                        placement="bottom-start"
-                    >
-                        <Button
-                            icon="edit"
-                            rightIcon="caret-down"
-                            text="Edit deck"
-                        />
-                    </Popover>
-                    <Button
-                        icon="plus"
-                        onClick={() =>
-                            openDialog(
-                                <CardForm deckId={deck.id} />,
-                                "New card",
-                            )
-                        }
-                        text="New card"
-                    />
-                </ButtonGroup>
+                <DeckPageControls deck={deck} cards={deckCards} />
             </div>
 
             {deckCards.length === 0 ? (
