@@ -3,6 +3,8 @@ import { useStore } from "../../app/stores/store";
 import CardForm from "./CardForm";
 import CardDelete from "./CardDelete";
 import CardDetails from "./CardDetails";
+import { Card } from "../../app/models/card";
+import { Deck } from "../../app/models/deck";
 
 interface Props {
     card: Card;

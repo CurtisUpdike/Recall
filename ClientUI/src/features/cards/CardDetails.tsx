@@ -1,7 +1,8 @@
 import { Card, Divider } from "@blueprintjs/core";
+import { Card as CardModel } from "../../app/models/card";
 
 interface Props {
-    card: Card;
+    card: CardModel;
 }
 
 function CardDetails({ card }: Props) {

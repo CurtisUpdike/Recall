@@ -1,11 +1,11 @@
-interface Card {
+export interface Card {
     id: string;
     front: string;
     back: string;
     deckId: string;
 }
 
-interface CardRequest {
+export interface CardRequest {
     front: string;
     back: string;
     deckId: string;

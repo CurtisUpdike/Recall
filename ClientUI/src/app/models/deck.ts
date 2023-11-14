@@ -1,8 +1,8 @@
-interface Deck {
+export interface Deck {
     id: string;
     name: string;
 }
 
-interface DeckRequest {
+export interface DeckRequest {
     name: string;
 }

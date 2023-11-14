@@ -1,5 +1,6 @@
 import { Button, Divider, PanelProps } from "@blueprintjs/core";
 import { useState } from "react";
+import { Card } from "../../app/models/card";
 
 export interface QuizPanelProps {
     card?: Card;

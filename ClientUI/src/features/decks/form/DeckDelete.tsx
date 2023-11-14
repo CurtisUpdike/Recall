@@ -1,6 +1,7 @@
 import { Button, Classes, Icon } from "@blueprintjs/core";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Deck } from "../../../app/models/deck";
 
 function DeckDelete({ deck }: { deck: Deck }) {
     const { deckStore, dialogStore } = useStore();

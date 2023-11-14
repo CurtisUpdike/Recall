@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { toast } from "../common/toast/toaster";
 import { store } from "./store";
+import { Card, CardRequest } from "../models/card";
 
 export default class CardStore {
     repository = new Map<string, Card>();

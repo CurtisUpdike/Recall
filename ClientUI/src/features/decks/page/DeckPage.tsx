@@ -7,6 +7,7 @@ import { Card, CardList, H1 } from "@blueprintjs/core";
 import EmptyCards from "../../cards/EmptyCards";
 import CardButtons from "../../cards/CardButtons";
 import DeckPageControls from "./DeckPageControls";
+import { Deck } from "../../../app/models/deck";
 
 function DeckPage() {
     const {
@@ -17,9 +18,9 @@ function DeckPage() {
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        loadDeck(id!).then(setDeck);
+        loadDeck(id!).then((d) => setDeck(d || null));
         if (!cardsLoaded) loadCards();
-    }, [decks, cardsLoaded, loadCards, id]);
+    }, [decks, cardsLoaded, loadCards, id, loadDeck]);
 
     if (!deck) return <Loading text="Loading deck..." />;
 

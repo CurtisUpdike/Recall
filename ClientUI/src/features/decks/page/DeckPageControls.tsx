@@ -3,6 +3,8 @@ import CardForm from "../../cards/CardForm";
 import { useStore } from "../../../app/stores/store";
 import EditMenu from "./DeckEditMenu";
 import Quiz from "../../quiz/Quiz";
+import { Deck } from "../../../app/models/deck";
+import { Card } from "../../../app/models/card";
 
 interface Props {
     deck: Deck;
@@ -33,7 +35,20 @@ function DeckPageControls({ deck, cards }: Props) {
                 icon="lightning"
                 text="Quiz"
                 disabled={cards.length < 1}
-                onClick={() => openDialog(<Quiz cards={cards} />, deck.name)}
+                onClick={() =>
+                    openDialog(
+                        <Quiz
+                            cards={cards
+                                .map((value) => ({
+                                    value,
+                                    sort: Math.random(),
+                                }))
+                                .sort((a, b) => a.sort - b.sort)
+                                .map(({ value }) => value)}
+                        />,
+                        deck.name,
+                    )
+                }
             />
         </ButtonGroup>
     );

@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import TextInput from "../../../app/common/form/TextInput";
 import { Button, Classes } from "@blueprintjs/core";
+import { Deck } from "../../../app/models/deck";
 
 interface Props {
     deck?: Deck;

@@ -2,6 +2,7 @@ import { Panel, PanelStack2 } from "@blueprintjs/core";
 import React from "react";
 import QuizPanel, { QuizPanelProps } from "./QuizPanel";
 import FinishedPanel from "./FinishedPanel";
+import { Card } from "../../app/models/card";
 
 interface Props {
     cards: Card[];

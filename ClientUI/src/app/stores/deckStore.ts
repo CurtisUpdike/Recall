@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { store } from "./store";
 import { toast } from "../common/toast/toaster";
 import { router } from "../router/routes";
+import { Deck, DeckRequest } from "../models/deck";
 
 export default class DeckStore {
     repository = new Map<string, Deck>();
@@ -41,7 +42,7 @@ export default class DeckStore {
                 deck = await agent.Decks.get(id);
                 return deck;
             } catch (error) {
-                throw error;
+                console.log(error);
             } finally {
                 this.setLoaded(false);
             }

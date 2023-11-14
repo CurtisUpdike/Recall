@@ -3,6 +3,7 @@ import DeckForm from "../form/DeckForm";
 import DeckDelete from "../form/DeckDelete";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../app/stores/store";
+import { Deck } from "../../../app/models/deck";
 
 const DeckMenu = ({ deck }: { deck: Deck }) => {
     const {
