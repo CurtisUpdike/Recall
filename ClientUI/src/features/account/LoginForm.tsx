@@ -1,4 +1,4 @@
-import { Button, Callout, H2 } from "@blueprintjs/core";
+import { Button, Callout } from "@blueprintjs/core";
 import { useStore } from "../../app/stores/store";
 import { ErrorMessage, Form, Formik } from "formik";
 import TextInput from "../../app/common/form/TextInput";
@@ -30,7 +30,6 @@ function LoginForm() {
                     autoComplete="off"
                     style={{ maxWidth: "300px", margin: "40px auto" }}
                 >
-                    <H2 style={{ marginBottom: "30px" }}>Sign in to Recall</H2>
                     <ErrorMessage
                         name="error"
                         render={() => (

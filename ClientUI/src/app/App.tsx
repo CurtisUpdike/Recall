@@ -5,9 +5,12 @@ import Nav from "./layout/Nav";
 import DialogContainer from "./common/dialog/DialogContainer";
 import MainContent from "./layout/MainContent";
 import Loading from "./common/loading/Loading";
+import { useLocation } from "react-router-dom";
+import HomePage from "../features/home/HomePage";
 
 function App() {
     const { commonStore, userStore } = useStore();
+    const location = useLocation();
 
     useEffect(() => {
         if (commonStore.token)
@@ -20,8 +23,14 @@ function App() {
     return (
         <>
             <DialogContainer />
-            <Nav />
-            <MainContent />
+            {location.pathname === "/" ? (
+                <HomePage />
+            ) : (
+                <>
+                    <Nav />
+                    <MainContent />
+                </>
+            )}
         </>
     );
 }

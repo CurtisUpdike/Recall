@@ -11,6 +11,10 @@ export default class UserStore {
         makeAutoObservable(this);
     }
 
+    get isLoggedIn() {
+        return !!this.user;
+    }
+
     private setUser = (user: User | null) => (this.user = user);
 
     register = async (request: RegisterRequest) => {
@@ -18,9 +22,11 @@ export default class UserStore {
             const user = await agent.Account.register(request);
             store.commonStore.setToken(user.token);
             this.setUser(user);
-            router.navigate("/");
+            router.navigate("/decks");
         } catch (error) {
-            throw error;
+            console.log(error);
+        } finally {
+            store.dialogStore.closeDialog();
         }
     };
 
@@ -29,9 +35,11 @@ export default class UserStore {
             const user = await agent.Account.login(request);
             store.commonStore.setToken(user.token);
             this.setUser(user);
-            router.navigate("/");
+            router.navigate("/decks");
         } catch (error) {
-            throw error;
+            console.log(error);
+        } finally {
+            store.dialogStore.closeDialog();
         }
     };
 
