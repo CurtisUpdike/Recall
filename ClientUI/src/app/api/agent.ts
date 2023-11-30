@@ -6,7 +6,7 @@ import { toast } from "../common/toast/toaster";
 import { Deck, DeckRequest } from "../models/deck";
 import { Card, CardRequest } from "../models/card";
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 axios.interceptors.request.use((config) => {
     const token = store.commonStore.token;
@@ -58,8 +58,10 @@ const response = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(response),
-    post: <T>(url: string, body: object) => axios.post<T>(url, body).then(response),
-    put: <T>(url: string, body: object) => axios.put<T>(url, body).then(response),
+    post: <T>(url: string, body: object) =>
+        axios.post<T>(url, body).then(response),
+    put: <T>(url: string, body: object) =>
+        axios.put<T>(url, body).then(response),
     delete: <T>(url: string) => axios.delete<T>(url).then(response),
 };
 

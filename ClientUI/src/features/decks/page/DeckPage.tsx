@@ -40,7 +40,10 @@ function DeckPage() {
             ) : (
                 <CardList>
                     {deckCards.map((card) => (
-                        <Card style={{ justifyContent: "space-between" }}>
+                        <Card
+                            key={card.id}
+                            style={{ justifyContent: "space-between" }}
+                        >
                             <span>{card.front}</span>
                             <CardButtons card={card} deck={deck} />
                         </Card>

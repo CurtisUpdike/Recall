@@ -23,10 +23,9 @@ export default class UserStore {
             store.commonStore.setToken(user.token);
             this.setUser(user);
             router.navigate("/decks");
-        } catch (error) {
-            console.log(error);
-        } finally {
             store.dialogStore.closeDialog();
+        } catch (error) {
+            throw error;
         }
     };
 
@@ -36,10 +35,9 @@ export default class UserStore {
             store.commonStore.setToken(user.token);
             this.setUser(user);
             router.navigate("/decks");
-        } catch (error) {
-            console.log(error);
-        } finally {
             store.dialogStore.closeDialog();
+        } catch (error) {
+            throw error;
         }
     };
 
