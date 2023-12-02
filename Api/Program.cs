@@ -1,9 +1,9 @@
 using Api.Middleware;
 using Api.Services;
+using Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddControllers();
 builder.Services.AddAuthorizedControllers();
 builder.Services.AddCorsPolicy();
 builder.Services.AddDataContext(builder.Configuration);
