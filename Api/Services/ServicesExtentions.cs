@@ -27,7 +27,7 @@ public static class ServicesExtentions
     {
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlServer(config.GetConnectionString("DataContext"));
+            options.UseNpgsql(config.GetConnectionString("DataContext"));
         });
 
         return services;
