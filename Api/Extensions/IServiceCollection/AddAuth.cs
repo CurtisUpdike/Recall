@@ -16,6 +16,10 @@ public static partial class IServiceCollectionExtensions
         {
             options.User.RequireUniqueEmail = true;
             options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequiredLength = 8;
         })
             .AddEntityFrameworkStores<DataContext>();
 

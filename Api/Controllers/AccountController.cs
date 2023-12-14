@@ -4,7 +4,6 @@ using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Api.Controllers;
@@ -26,22 +25,7 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<UserCredentials>> Register(RegisterRequest request)
     {
-        if (string.IsNullOrEmpty(request.Username))
-            ModelState.AddModelError("username", "Username is required");
-
-        if (await userManager.Users.AnyAsync(u => u.UserName == request.Username))
-            ModelState.AddModelError("username", "Username is already taken");
-
-        if (await userManager.Users.AnyAsync(u => u.Email == request.Email))
-            ModelState.AddModelError("email", "Email is already taken");
-
-        if (request.Password != request.PasswordConfirmation)
-            ModelState.AddModelError("password", "Passwords do not match");
-
-        if (!ModelState.IsValid)
-            return ValidationProblem();
-
-        var user = new AppUser
+        var user = new AppUser 
         {
             Email = request.Email,
             UserName = request.Username
@@ -49,10 +33,13 @@ public class AccountController : ControllerBase
 
         var result = await userManager.CreateAsync(user, request.Password);
 
-        if (result.Succeeded)
-            return new UserCredentials(request.Username, tokenService.CreateToken(user));
-        else
-            return BadRequest(result.Errors);
+        if (!result.Succeeded)
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(error.Code, error.Description);
+
+        return ModelState.IsValid
+            ? new UserCredentials(request.Username, tokenService.CreateToken(user))
+            : ValidationProblem();
     }
 
     [AllowAnonymous]
@@ -64,12 +51,11 @@ public class AccountController : ControllerBase
         if (user is null)
             return Unauthorized();
 
-        var passwordDoesMatch = await userManager.CheckPasswordAsync(user, request.Password);
+        var isValidPassword = await userManager.CheckPasswordAsync(user, request.Password);
 
-        if (passwordDoesMatch)
-            return new UserCredentials(user.UserName!, tokenService.CreateToken(user));
-        else
-            return Unauthorized();
+        return isValidPassword
+            ? new UserCredentials(user.UserName!, tokenService.CreateToken(user))
+            : Unauthorized();
     }
 
     [HttpGet]
@@ -78,9 +64,8 @@ public class AccountController : ControllerBase
         var user = await userManager.FindByEmailAsync(
             User.FindFirstValue(ClaimTypes.Email)!);
 
-        if (user is null)
-            return Unauthorized();
-        else
-            return new UserCredentials(user.UserName!, tokenService.CreateToken(user));
+        return user is not null
+            ? new UserCredentials(user.UserName!, tokenService.CreateToken(user))
+            : Unauthorized();
     }
 }
